@@ -1,0 +1,23 @@
+.marquee-container {
+  background: #befabe;
+  width: calc(100% + 50px);
+  margin-left: -25px;
+  overflow: hidden;
+  padding: 8px 0;
+  margin: 12px 0;
+}
+.marquee-inner {
+  display: flex;
+  white-space: nowrap;
+  animation: scroll 25s linear infinite;
+}
+.marquee-inner span {
+  font-size: 11px;
+  font-weight: 700;
+  color: #0a5a0a;
+  padding-right: 4px;
+}
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}

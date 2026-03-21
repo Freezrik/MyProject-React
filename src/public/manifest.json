@@ -1,0 +1,27 @@
+{
+  "short_name": "Дія",
+  "name": "Дія - Учбовий Прототип",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "apple-touch-icon"
+    },
+    {
+      "src": "icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/index.html",
+  "background_color": "#bde0fe",
+  "display": "standalone",
+  "theme-color": "#bde0fe",
+  "orientation": "portrait"
+}

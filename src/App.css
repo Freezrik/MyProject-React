@@ -1,0 +1,115 @@
+:root {
+  --bg-start: #cae6fd;
+  --bg-end: #e1fdec;
+  --diia-black: #000000;
+  --diia-gray: #828282;
+  --safe-top: env(safe-area-inset-top);
+  --safe-bottom: env(safe-area-inset-bottom);
+  --ios-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+
+body, html, #root {
+  margin: 0; padding: 0;
+  width: 100%; height: 100%;
+  font-family: var(--ios-font);
+  overflow: hidden;
+}
+
+.app-container {
+  width: 100%; height: 100%;
+  position: relative;
+}
+
+/* --- ЖИВОЙ ГРАДИЕНТ НА ФОНЕ --- */
+.gradient-bg {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 50%, var(--bg-start) 100%);
+  background-size: 400% 400%;
+  animation: gradientAnimation 15s ease infinite;
+  z-index: -1;
+}
+
+@keyframes gradientAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* --- ОБЩИЕ ЭКРАНЫ --- */
+.screen {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  display: none; flex-direction: column;
+  padding-top: var(--safe-top);
+  padding-bottom: var(--safe-bottom);
+}
+.screen.active { display: flex; }
+
+/* Приветствие */
+.hello-screen { justify-content: center; align-items: center; cursor: pointer; }
+.hello-text { font-size: 42px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+.wave-emoji { font-size: 42px; }
+.logo-footer { position: absolute; bottom: calc(var(--safe-bottom) + 40px); display: flex; gap: 15px; }
+.logo-btn { width: 62px; height: 62px; border-radius: 19px; display: flex; justify-content: center; align-items: center; font-size: 21px; font-weight: bold; border: 1px solid rgba(0,0,0,0.04); }
+.logo-dark { background: #000; color: #fff; }
+.logo-light { background: rgba(255,255,255,0.85); color: #000; }
+
+/* Пин */
+.pin-screen { align-items: center; justify-content: space-between; padding-top: calc(var(--safe-top) + 60px); padding-bottom: calc(var(--safe-bottom) + 30px); }
+.pin-top { display: flex; flex-direction: column; align-items: center; }
+.pin-title { font-size: 22px; font-weight: 500; margin-bottom: 30px; }
+.pin-dots { display: flex; gap: 18px; margin-bottom: 30px; }
+.dot { width: 14px; height: 14px; border-radius: 50%; background: rgba(0,0,0,0.1); transition: background 0.2s; }
+.dot.filled { background: var(--diia-black); }
+
+.keyboard { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px 25px; }
+.key { width: 80px; height: 80px; border-radius: 50%; background: #fff; display: flex; justify-content: center; align-items: center; font-size: 36px; font-weight: 400; box-shadow: 0 2px 4px rgba(0,0,0,0.03); cursor: pointer; }
+.key:active { background: #f0f0f0; }
+.key.icon { font-size: 28px; background: transparent; box-shadow: none; cursor: default; }
+
+/* Документы */
+.docs-screen { padding: 0; }
+.docs-header { padding: calc(var(--safe-top) + 20px) 20px 10px 25px; font-size: 34px; font-weight: 700; }
+
+/* SWIPER (3D свайп) */
+.swiper { width: 100%; height: 100%; padding-top: 15px; padding-bottom: 120px; }
+.swiper-slide { display: flex; justify-content: center; align-items: flex-start; }
+
+/* --- ОБЩИЕ СТИЛИ КАРТОЧЕК (Glassmorphism 1:1) --- */
+.doc-card {
+  width: 90%; max-width: 350px; height: 470px;
+  border-radius: 35px;
+  padding: 25px;
+  backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); /* РАЗМЫТИЕ */
+  border: 1px solid rgba(255,255,255,0.5); /* Блик на грани */
+  box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+  display: flex; flex-direction: column;
+  position: relative;
+}
+
+/* Детализация паспорта */
+.doc-type { font-size: 18px; font-weight: 600; margin: 0 0 20px 0; }
+.doc-main-info { display: flex; gap: 20px; margin-bottom: 25px; }
+
+.doc-photo { width: 125px; height: 165px; border-radius: 22px; overflow: hidden; background: #e0e0e0;}
+.doc-photo img { width: 100%; height: 100%; object-fit: cover; }
+
+.doc-fields { flex: 1; display: flex; flex-direction: column; gap: 14px; font-size: 13px; }
+.field-label { color: var(--diia-gray); margin-bottom: 2px; }
+.field-value { font-weight: 500; font-size: 15px; color: #000; }
+
+.doc-owner-name { font-size: 24px; font-weight: 700; line-height: 1.05; flex: 1; white-space: pre-line; }
+.doc-more-btn { position: absolute; right: 25px; bottom: 25px; font-size: 24px; color: var(--diia-gray); cursor: pointer; }
+
+/* Кастомный пагинатор (точки снизу) */
+.swiper-pagination-bullets { bottom: calc(var(--safe-bottom) + 95px) !important; }
+.swiper-pagination-bullet { width: 8px; height: 8px; background: rgba(0,0,0,0.3); opacity: 1; margin: 0 5px !important; }
+.swiper-pagination-bullet-active { background: #000; }
+
+/* ТАБ-БАР (image_2.png) */
+.tab-bar { position: absolute; bottom: 0; left: 0; width: 100%; height: calc(65px + var(--safe-bottom)); background: #000; color: #fff; display: flex; justify-content: space-around; padding-top: 10px; padding-bottom: var(--safe-bottom); border-top-left-radius: 25px; border-top-right-radius: 25px; z-index: 10; transform: translateY(100%); transition: transform 0.3s ease; }
+.tab-bar.visible { transform: translateY(0); }
+.tab-item { display: flex; flex-direction: column; align-items: center; color: #8e8e93; font-size: 11px; text-decoration: none; width: 25%; }
+.tab-item.active { color: #fff; }
+.tab-icon { font-size: 24px; margin-bottom: 4px; }
