@@ -1,23 +1,35 @@
-.marquee-container {
-  background: #befabe;
+.marquee-wrapper {
+  /* Зелено-голубой градиент Дии */
+  background: linear-gradient(90deg, #a0e6a1 0%, #70d4c8 100%) !important;
+  /* Растягиваем за пределы padding'а карточки */
   width: calc(100% + 50px);
   margin-left: -25px;
   overflow: hidden;
-  padding: 8px 0;
-  margin: 12px 0;
+  
+  /* УВЕЛИЧИЛИ ВЫСОТУ СТРОКИ (было 28px) */
+  height: 34px; 
+  
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px; /* Отступ до ФИО */
 }
-.marquee-inner {
+
+.marquee-content {
   display: flex;
   white-space: nowrap;
-  animation: scroll 25s linear infinite;
+  animation: marqueeLoop 25s linear infinite;
 }
-.marquee-inner span {
-  font-size: 11px;
-  font-weight: 700;
-  color: #0a5a0a;
-  padding-right: 4px;
+
+.marquee-content span {
+  /* УВЕЛИЧИЛИ РАЗМЕР ШРИФТА (было 11px) */
+  font-size: 15px;
+  
+  font-weight: 500;
+  color: #000 !important; 
+  padding-right: 5px;
 }
-@keyframes scroll {
+
+@keyframes marqueeLoop {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
