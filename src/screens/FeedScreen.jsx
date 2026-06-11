@@ -1,9 +1,12 @@
 import React from 'react';
 
-const FeedScreen = () => {
+const FeedScreen = ({ firstName }) => {
+  // Если имя передано сверху (из базы), используем его. Если нет — оставляем Илью по умолчанию.
+  const nameToDisplay = firstName || "Ілля";
+
   return (
     <div className="screen-scroll-content">
-      <h1 className="screen-header">Привіт, Ілля 👋</h1>
+      <h1 className="screen-header">Привіт, {nameToDisplay} 👋</h1>
       
       <div className="nezlamnist-card">
         <div className="nezlamnist-title">Незламність</div>
