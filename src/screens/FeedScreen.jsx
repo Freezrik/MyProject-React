@@ -13,7 +13,6 @@ const MenuScreen = () => {
       <div className="menu-sub-text">Версія Дії: 4.31.7.2515</div>
 
       
-
       <div className="menu-group">
 
         <div className="menu-row" style={{borderBottom: 'none'}}>
