@@ -14,12 +14,37 @@ import ServicesScreen from './screens/ServicesScreen';
 import MenuScreen from './screens/MenuScreen';
 
 function App() {
-  const [screen, setScreen] = useState("hello"); 
+  // Экраны: "auth" (ввод токена) -> "hello" (приветствие) -> "pin" (код) -> "main" (документы)
+  const [screen, setScreen] = useState("auth"); 
   const [activeTab, setActiveTab] = useState("документи"); 
   
+  const [authToken, setAuthToken] = useState(""); // Сюда вводится токен из бота
+  const [userData, setUserData] = useState(null);  // Тут будут лежать данные из Firebase
+  const [isLoading, setIsLoading] = useState(false);
+
   const [pin, setPin] = useState("");
   const [flippedIndex, setFlippedIndex] = useState(null);
   const [timeLeft, setTimeLeft] = useState(180); 
+
+  // Функция авторизации (запрос к вашему Node.js боту)
+  const handleLogin = async () => {
+    if (!authToken.trim()) return alert("Введіть код авторизації!");
+    setIsLoading(true);
+    try {
+      // НАДО ЗАМЕНИТЬ НА URL ВАШЕГО СЕРВЕРА (когда задеплоите бота на Render или Railway)
+      // Пока проверяете локально на компе, можно юзать http://localhost:3000
+      const response = await fetch(`http://localhost:3000/user/${authToken.trim()}`);
+      if (!response.ok) throw new Error("Користувача не знайдено або код невірний");
+      
+      const data = await response.json();
+      setUserData(data); // Сохраняем ФИО, фото и премиум статус в память
+      setScreen("hello"); // Пускаем на экран приветствия "Привіт 👋"
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const tapKey = (key) => {
     if (key === 'back') {
@@ -59,33 +84,67 @@ function App() {
     return `${m}:${s < 10 ? '0' : ''}${s}`;
   };
 
-  // ИСПРАВЛЕНО: Пути ведут в папку public, которая доступна из корня "/"
+  // Если данные загрузились, подставляем их из userData, если нет — дефолты
+  const userFields = userData ? [
+    { label: "Дата народження:", value: userData.birth_date },
+    { label: "Номер:", value: "0101" + String(userData.telegram_id || "28102").slice(0, 5) }
+  ] : [
+    { label: "Дата народження:", value: "11.07.2007" },
+    { label: "Номер:", value: "010128102" }
+  ];
+
+  const taxFields = userData ? [
+    { label: "Номер", value: "4000" + String(userData.telegram_id || "410059").slice(0, 6), isBig: true },
+    { label: "Прізвище, ім'я, по батькові", value: userData.full_name },
+    { label: "Дата народження", value: userData.birth_date }
+  ] : [
+    { label: "Номер", value: "4000410059", isBig: true },
+    { label: "Прізвище, ім'я, по батькові", value: "Паршук Ілля Євгенович" },
+    { label: "Дата народження", value: "11.07.2007" }
+  ];
+
   const docsData = [
     {
       type: "Паспорт громадянина України",
-      photo: "/photo.jpeg", 
-      fields: [
-        { label: "Дата народження:", value: "11.07.2007" },
-        { label: "Номер:", value: "010128102" }
-      ],
-      name: "Паршук\n Ілля\n Євгенович",
+      photo: userData ? userData.photo : "/photo.jpeg", 
+      fields: userFields,
+      // Форматируем имя переносами строк, если оно пришло из базы
+      name: userData ? userData.full_name.split(" ").join("\n ") : "Паршук\n Ілля\n Євгенович",
       color: "rgba(255, 255, 255, 0.45)"
     },
     {
       type: "Картка платника податків",
       photo: null, 
-      fields: [
-        { label: "Номер", value: "4000410059", isBig: true },
-        { label: "Прізвище, ім'я, по батькові", value: "Паршук Ілля Євгенович" },
-        { label: "Дата народження", value: "11.07.2007" }
-      ],
-      valueBig: "4000410059 ❐",
+      fields: taxFields,
+      valueBig: userData ? "4000" + String(userData.telegram_id || "410059").slice(0, 6) + " ❐" : "4000410059 ❐",
       color: "rgba(230, 255, 250, 0.55)"
     }
   ];
 
   return (
     <div className="app-container">
+      
+      {/* 0. ЭКРАН ВВОДА КОДА АВТОРИЗАЦИИ */}
+      {screen === "auth" && (
+        <div className="screen active auth-screen" style={{padding: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%', background: '#f5f5f7'}}>
+          <h2 style={{textAlign: 'center', marginBottom: '10px', color: '#000'}}>Авторизація в Дії</h2>
+          <p style={{textAlign: 'center', fontSize: '14px', color: '#666', marginBottom: '20px'}}>Введіть унікальний код, який ви отримали в нашому Telegram-боті</p>
+          <input 
+            type="text" 
+            placeholder="Введіть код авторизації..." 
+            value={authToken}
+            onChange={(e) => setAuthToken(e.target.value)}
+            style={{padding: '15px', borderRadius: '10px', border: '1px solid #ccc', marginBottom: '15px', fontSize: '16px', textAlign: 'center'}}
+          />
+          <button 
+            onClick={handleLogin} 
+            disabled={isLoading}
+            style={{padding: '15px', borderRadius: '10px', background: '#000', color: '#fff', border: 'none', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer'}}
+          >
+            {isLoading ? "Завантаження..." : "Увійти"}
+          </button>
+        </div>
+      )}
       
       {/* 1. ПРИВЕТСТВИЕ */}
       {screen === "hello" && (
@@ -142,12 +201,21 @@ function App() {
           
           {activeTab === "документи" ? <div className="gradient-bg"></div> : <div className="static-bg"></div>}
           
-          {activeTab === "стрічка" && <FeedScreen />}
+          {/* Передаем имя пользователя на экран ленты */}
+          {activeTab === "стрічка" && <FeedScreen userName={userData ? userData.full_name.split(" ")[1] : "Ілля"} />}
           {activeTab === "сервіси" && <ServicesScreen />}
           {activeTab === "меню" && <MenuScreen />}
 
           {activeTab === "документи" && (
             <div className="swiper-centering-container">
+              
+              {/* ПОКАЗЫВАЕМ ВОТЕРМАРКУ, ЕСЛИ У ПОЛЬЗОВАТЕЛЯ НЕТ ПРЕМИУМА */}
+              {userData && !userData.is_premium && (
+                <div style={{position: 'absolute', top: '80px', left: '0', width: '100%', backgroundColor: 'rgba(239, 68, 68, 0.9)', color: 'white', textAlign: 'center', padding: '8px', fontSize: '12px', fontWeight: 'bold', zIndex: 10, borderRadius: '5px'}}>
+                  ⚠️ ТЕСТОВИЙ РЕЖИМ. НЕ МАЄ ЮРИДИЧНОЇ СИЛИ.
+                </div>
+              )}
+
               <Swiper grabCursor={true} centeredSlides={true} slidesPerView={'auto'} spaceBetween={16} pagination={{ clickable: true }} modules={[Pagination]} className="mySwiper">
                 {docsData.map((doc, index) => (
                   <SwiperSlide key={index}>
@@ -158,7 +226,7 @@ function App() {
                           <div className="doc-type">{doc.type}</div>
                           {doc.photo ? (
                             <div className="doc-main-info">
-                              <div className="doc-photo"><img src={doc.photo} alt="user" /></div>
+                              <div className="doc-photo"><img src={doc.photo} alt="user" crossorigin="anonymous" /></div>
                               <div className="doc-fields">
                                 {doc.fields.map((f, i) => (
                                   <div key={i} className="field-group">
@@ -166,7 +234,6 @@ function App() {
                                     <div className="field-value">{f.value}</div>
                                   </div>
                                 ))}
-                                {/* ИСПРАВЛЕНО: Прямая ссылка на подпись в папке public */}
                                 <img src="/signature.png" alt="Підпис" className="signature" />
                               </div>
                             </div>
