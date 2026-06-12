@@ -9,15 +9,14 @@ import Marquee from './components/Marquee';
 import './App.css';
 import signatureImg from './signature.png';
 
-// ИМПОРТЫ НАШИХ НОВЫХ ЭКРАНОВ
+// ИМПОРТЫ НАШИХ ЭКРАНОВ
 import FeedScreen from './screens/FeedScreen';
 import ServicesScreen from './screens/ServicesScreen';
 import MenuScreen from './screens/MenuScreen';
 
 function App() {
-  // Начинаем с hello, потом pin, потом main
   const [screen, setScreen] = useState("hello"); 
-  const [activeTab, setActiveTab] = useState("документи"); // Управление вкладками
+  const [activeTab, setActiveTab] = useState("документи"); 
   
   const [pin, setPin] = useState("");
   const [flippedIndex, setFlippedIndex] = useState(null);
@@ -30,7 +29,10 @@ function App() {
       const newPin = pin + key;
       setPin(newPin);
       if (newPin.length === 4) {
-        setTimeout(() => { setScreen("main"); setPin(""); }, 300); // Переходим на main экран
+        setTimeout(() => { 
+          setScreen("main"); 
+          setPin(""); 
+        }, 300);
       }
     }
   };
@@ -60,7 +62,7 @@ function App() {
 
   const docsData = [
     {
-      type: "Паспорт громадянина України",
+      type: "Паспорт громадянина Украины",
       photo: "./photo.jpeg",
       fields: [
         { label: "Дата народження:", value: "11.07.2007" },
@@ -182,7 +184,7 @@ function App() {
                           )}
                           <div className="doc-bottom-section">
                             <Marquee />
-                            {doc.name && <div className="doc-owner-name">{doc.name}</div>}
+                            {doc.name && <div className="doc-owner-name" style={{whiteSpace: 'pre-line'}}>{doc.name}</div>}
                             {doc.valueBig && <div className="doc-value-big">{doc.valueBig}</div>}
                             <div className="doc-more-btn">
                               <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><circle cx="5" cy="12" r="2.5" /><circle cx="12" cy="12" r="2.5" /><circle cx="19" cy="12" r="2.5" /></svg>
