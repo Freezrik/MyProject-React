@@ -7,7 +7,6 @@ import 'swiper/css/pagination';
 
 import Marquee from './components/Marquee';
 import './App.css';
-import signatureImg from './signature.png';
 
 // ИМПОРТЫ НАШИХ ЭКРАНОВ
 import FeedScreen from './screens/FeedScreen';
@@ -60,10 +59,11 @@ function App() {
     return `${m}:${s < 10 ? '0' : ''}${s}`;
   };
 
+  // ИСПРАВЛЕНО: Пути ведут в папку public, которая доступна из корня "/"
   const docsData = [
     {
       type: "Паспорт громадянина України",
-      photo: "./photo.jpeg",
+      photo: "/photo.jpeg", 
       fields: [
         { label: "Дата народження:", value: "11.07.2007" },
         { label: "Номер:", value: "010128102" }
@@ -136,19 +136,16 @@ function App() {
         </>
       )}
 
-      {/* 3. ГЛАВНЫЙ ЭКРАН (С Вкладками) */}
+      {/* 3. ГЛАВНЫЙ ЭКРАН */}
       {screen === "main" && (
         <div className="screen active docs-screen" style={{paddingTop: 0}}>
           
-          {/* Умный фон */}
           {activeTab === "документи" ? <div className="gradient-bg"></div> : <div className="static-bg"></div>}
           
-          {/* РОУТИНГ ПО ВКЛАДКАМ */}
           {activeTab === "стрічка" && <FeedScreen />}
           {activeTab === "сервіси" && <ServicesScreen />}
           {activeTab === "меню" && <MenuScreen />}
 
-          {/* ДОКУМЕНТЫ */}
           {activeTab === "документи" && (
             <div className="swiper-centering-container">
               <Swiper grabCursor={true} centeredSlides={true} slidesPerView={'auto'} spaceBetween={16} pagination={{ clickable: true }} modules={[Pagination]} className="mySwiper">
@@ -169,7 +166,8 @@ function App() {
                                     <div className="field-value">{f.value}</div>
                                   </div>
                                 ))}
-                                <img src={signatureImg} alt="Підпис" className="signature" />
+                                {/* ИСПРАВЛЕНО: Прямая ссылка на подпись в папке public */}
+                                <img src="/signature.png" alt="Підпис" className="signature" />
                               </div>
                             </div>
                           ) : (
