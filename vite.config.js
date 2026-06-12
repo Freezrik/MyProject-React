@@ -1,8 +1,8 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/MyProject-React/',
+  base: 'https://github.com/Freezrik/MyProject-React.git', // НАПРИМЕР: если ссылка freezrik.github.io/diia, то пишите '/diia/'
 })
