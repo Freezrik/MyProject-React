@@ -62,7 +62,7 @@ function App() {
 
   const docsData = [
     {
-      type: "Паспорт громадянина Украины",
+      type: "Паспорт громадянина України",
       photo: "./photo.jpeg",
       fields: [
         { label: "Дата народження:", value: "11.07.2007" },
@@ -140,7 +140,7 @@ function App() {
       {screen === "main" && (
         <div className="screen active docs-screen" style={{paddingTop: 0}}>
           
-          {/* Умный фон: крутится только для документов */}
+          {/* Умный фон */}
           {activeTab === "документи" ? <div className="gradient-bg"></div> : <div className="static-bg"></div>}
           
           {/* РОУТИНГ ПО ВКЛАДКАМ */}
@@ -194,7 +194,7 @@ function App() {
 
                         <div className="card-face card-back">
                           <div className="qr-timer">Код діятиме ще {formatTime(timeLeft)} хв</div>
-                          <div className="qr-image-container"><img src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=Diia_Application_Dynamic_QR_Code_Simulation_Very_Dense_Format_1234567890_VERY_LONG_STRING_TO_MAKE_IT_LOOK_COMPLEX_AND_REALISTIC_LIKE_ORIGINAL_UKRAINE_APP" alt="QR" /></div>
+                          <div className="qr-image-container"><img src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=Diia_Application_Dynamic_QR_Code_Simulation_Very_Dense_Format_1234567890" alt="QR" /></div>
                           <div className="qr-buttons">
                             <div className="qr-btn-group">
                               <div className="qr-btn black-btn"><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v2h-3v-2zm-3 0h2v2h-2v-2zm3 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm3 3h3v2h-3v-2zm-3 0h2v2h-2v-2z"/></svg></div>
