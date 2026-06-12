@@ -2,15 +2,17 @@ import React from 'react';
 
 
 
-const FeedScreen = () => {
-
+   // Вместо: const FeedScreen = () => {
+// Сделайте вот так:
+const FeedScreen = ({ userName }) => {
   return (
-
     <div className="screen-scroll-content">
-
-      <h1 className="screen-header">Привіт, Ілля 👋</h1>
-
+      <h1 className="screen-header">Привіт, {userName || "Ілля"} 👋</h1>
+      {/* Весь остальной код экрана остается без изменений */}
       
+
+
+   
 
       <div className="nezlamnist-card">
 
